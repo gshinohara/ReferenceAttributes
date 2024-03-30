@@ -32,7 +32,7 @@ namespace ReferenceAttributes.Components
         {
             pManager.AddParameter(new Param_Layer(), "Layer", "L", "Baked layer", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Baked?", "B?", "", GH_ParamAccess.item);
-        
+
         }
 
         protected override void BeforeSolveInstance()
@@ -69,7 +69,7 @@ namespace ReferenceAttributes.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"{layer.Value.FullPath} already exists, so it isn't bake.");
                 DA.SetData("Layer", layer);
             }
-            else if(isready)
+            else if (isready)
             {
                 LayerTable layers = Rhino.RhinoDoc.ActiveDoc.Layers;
                 List<Layer> layers_to_bake = new List<Layer>();
@@ -109,7 +109,7 @@ namespace ReferenceAttributes.Components
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Baking wasn't be solved for some reasons.");
                 else
                 {
-                    layers.Modify(layer.Value, bakedlayer.Id, true);
+                    bakedlayer.Color = layer.Value.Color;
                     baked = true;
                 }
                 DA.SetData("Layer", new GH_Layer(bakedlayer));
