@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using ReferenceAttributes.Kernel.Parameters;
 using ReferenceAttributes.Kernel.Types;
 using Rhino.DocObjects;
@@ -32,13 +33,13 @@ namespace ReferenceAttributes.Components
             string fullpath = default;
             Color color = default;
 
-            if (!DA.GetData("Fullpath", ref fullpath) && !DA.GetData("Color", ref color))
+            if (!DA.GetData("Fullpath", ref fullpath) || !DA.GetData("Colour", ref color))
                 return;
 
             Layer layer = new Layer
             {
                 Name = fullpath,
-                Color = color,
+                Color = color
             };
 
             DA.SetData("Layer", new GH_Layer(layer));

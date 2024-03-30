@@ -25,6 +25,7 @@ namespace ReferenceAttributes.Components
             pManager.AddTextParameter("Fullpath", "FP", "", GH_ParamAccess.item);
             pManager.AddTextParameter("Name", "N", "", GH_ParamAccess.item);
             pManager.AddColourParameter("Colour", "C", "", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Exsist?", "E?", "", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -35,6 +36,7 @@ namespace ReferenceAttributes.Components
             DA.SetData("Fullpath", layer.Value.FullPath);
             DA.SetData("Name", (layer.IsReferenced) ? layer.Value.Name : Layer.GetLeafName(layer.Value));
             DA.SetData("Colour", layer.Value.Color);
+            DA.SetData("Exsist?", layer.IsReferenced);
         }
 
         protected override System.Drawing.Bitmap Icon => null;
