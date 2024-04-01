@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using Rhino.DocObjects;
 using Rhino.DocObjects.Tables;
 using System.Collections.Generic;
@@ -25,17 +26,23 @@ namespace ReferenceAttributes.Utility
             {
                 AllowMultipleSelection = multiple,
             };
-            GridColumn column = new GridColumn
+
+            GridColumn column_name = new GridColumn
             {
-                HeaderText = "Layers",
+                HeaderText = "Name",
                 Editable = false,
-                DataCell = new TextBoxCell(0)
+                DataCell = new TextBoxCell(0),
+                Width = 100,
+                Resizable = true,
             };
-            treeGridView.Columns.Add(column);
+            treeGridView.Columns.Add(column_name);
 
             TreeGridItemCollection items = new TreeGridItemCollection();
             foreach(Layer layer in layers.OrderBy(l => l.SortIndex))
             {
+                if (layer.IsDeleted)
+                    continue;
+
                 TreeGridItem item = new TreeGridItem
                 {
                     Values = new string[] { layer.Name },
@@ -61,6 +68,22 @@ namespace ReferenceAttributes.Utility
             }
 
             treeGridView.DataStore = items;
+
+            DrawableCell cell_color = new DrawableCell();
+            cell_color.Paint += (sender, e) =>
+            {
+                RectangleF clip = e.ClipRectangle;
+                if (e.Item is TreeGridItem item && item.Tag is Layer layer)
+                    e.Graphics.FillRectangle(Color.FromArgb(layer.Color.ToArgb()), new RectangleF(clip.Center-new SizeF(clip.Height/2,clip.Height/2),new SizeF(clip.Height,clip.Height)));
+            };
+            GridColumn column_color = new GridColumn
+            {
+                HeaderText = "Color",
+                Editable = false,
+                DataCell = cell_color,
+                Resizable = false,
+            };
+            treeGridView.Columns.Add(column_color);
 
             Button btn_ok = new Button { Text = "OK" };
             btn_ok.Click += (sender, e) =>
