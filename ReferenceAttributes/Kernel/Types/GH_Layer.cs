@@ -21,9 +21,9 @@ namespace ReferenceAttributes.Kernel.Types
         {
         }
 
-        public virtual Guid ReferenceID { get => Value.Id; set { Value.Id = value; } }
+        public Guid ReferenceID { get => Value.Id; set { Value.Id = value; } }
 
-        public virtual bool IsReferenced => !ReferenceID.Equals(Guid.Empty);
+        public bool IsReferenced => Value.HasId;
 
         public override bool IsValid => (Value == null) ? false : Value.IsValid;
 
